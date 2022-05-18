@@ -42,7 +42,8 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 	private static final String NAME_KEY = "name";
 	private static final String RESPONSE_KEY = "response";
 	private static final String KAKAO_ACCOUNT_KEY = "kakao_account";
-
+	@Autowired
+	private UserRepository repo;
 	@Autowired
 	private UserService userService;
 	@RequestMapping("/user")
@@ -98,11 +99,15 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 			System.out.println("Unknown method of authentication.");
 			return Collections.singletonMap("result", false);
 		}
+		User user = repo.findByEmail(email);
 
-		userRegistrationDto.setName(name);
-		userRegistrationDto.setEmail(email);
 
-		userService.save(userRegistrationDto);
+		if (user == null) {
+			userRegistrationDto.setName(name);
+			userRegistrationDto.setEmail(email);
+			userService.save(userRegistrationDto);
+		}
+
 		return Collections.singletonMap(NAME_KEY, name);
 
 	}

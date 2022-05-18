@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -87,17 +87,22 @@
                         </div>
                         <div class = "form-group">
                             <div class ="row">
-                                With Google: <a href="/oauth2/authorization/google">click here</a>
+                                Register: <a th:href="@{/register}">>click here</a>
                             </div>
                         </div>
                         <div class = "form-group">
                             <div class ="row">
-                                With Naver: <a href="/oauth2/authorization/naver">click here</a>
+                                Login / Register with Google: <a href="/oauth2/authorization/google">click here</a>
                             </div>
                         </div>
                         <div class = "form-group">
                             <div class ="row">
-                                With Kakao: <a href="/oauth2/authorization/kakao">click here</a>
+                                Login / Register with Naver: <a href="/oauth2/authorization/naver">click here</a>
+                            </div>
+                        </div>
+                        <div class = "form-group">
+                            <div class ="row">
+                                Login / Register with Kakao: <a href="/oauth2/authorization/kakao">click here</a>
                             </div>
                         </div>
 
