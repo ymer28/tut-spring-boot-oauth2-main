@@ -28,6 +28,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 // To enable HTTP Security in Spring, we need to extend the WebSecurityConfigurerAdapter to provide a
 // default configuration in the configure(HttpSecurity http) method
 public class SocialApplication extends WebSecurityConfigurerAdapter {
+
+	private static final String EMAIL_KEY = "email";
+	private static final String NAME_KEY = "name";
+	private static final String RESPONSE_KEY = "response";
+	private static final String KAKAO_ACCOUNT_KEY = "kakao_account";
+
 	@Autowired
 	private UserService userService;
 	@RequestMapping("/user")
@@ -55,18 +62,48 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 		String name = "";
 		String email = "";
 		UserRegistrationDto userRegistrationDto = new UserRegistrationDto(name,email);
-		email = principal.getAttribute("email");
-		name = principal.getAttribute("name");
+		// Case Google login
+		email = principal.getAttribute(EMAIL_KEY);
+		name = principal.getAttribute(NAME_KEY);
 		if (email == null && name == null) {
-			Map<String, Object> response = principal.getAttribute("response");
-			email = (String) response.get("email");
-			name = (String) response.get("name");
+			// Case Naver login
+			if (principal.getAttribute(RESPONSE_KEY) != null) {
+				Map<String, Object> response = principal.getAttribute(RESPONSE_KEY);
+				// Assign value to email and name only if response is not null
+				// It allows us to avoid a nullPointer Exception which would return an error
+				if (null != response) {
+					email = (String) response.get(EMAIL_KEY);
+					name = (String) response.get(NAME_KEY);
+				}
+			// Case Kakao login
+			} else if(principal.getAttribute(KAKAO_ACCOUNT_KEY) != null) {
+				Map<String, Object> kakaoResponseEmail = principal.getAttribute(KAKAO_ACCOUNT_KEY);
+				Map<String, Object> kakaoResponseName = principal.getAttribute("properties");
+
+				// Assign value to email and name only if response is not null
+				// It allows us to avoid a nullPointer Exception which would return an error
+				if (null != kakaoResponseName) {
+					name = (String) kakaoResponseName.get("nickname");
+				}
+				if (null != kakaoResponseEmail) {
+					email = (String) kakaoResponseEmail.get(EMAIL_KEY);
+				}
+			} else {
+				System.out.println("Unknown method of authentication.");
+			}
+
 		}
+		// StringUtils.hasLength() is a method checking if a value is empty or null
+		if (!StringUtils.hasLength(name) || !StringUtils.hasLength(email)) {
+			System.out.println("Unknown method of authentication.");
+			return Collections.singletonMap("result", false);
+		}
+
 		userRegistrationDto.setName(name);
 		userRegistrationDto.setEmail(email);
 
 		userService.save(userRegistrationDto);
-		return Collections.singletonMap("name", name);
+		return Collections.singletonMap(NAME_KEY, name);
 
 	}
 
