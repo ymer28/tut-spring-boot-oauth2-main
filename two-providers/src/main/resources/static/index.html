@@ -8,10 +8,11 @@
 <meta name="viewport" content="width=device-width" />
 <base href="/" />
 <link rel="stylesheet" type="text/css"
-    href="/webjars/bootstrap/css/bootstrap.min.css" />
+      href="/webjars/bootstrap/css/bootstrap.min.css" />
 <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
 <script type="text/javascript"
-    src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    src="/webjars/bootstrap/js/bootstrap.min.js">
+</script>
 </head>
 <body>
 <!--    <nav class="navbar navbar-inverse navbar-fixed-top">-->
@@ -85,29 +86,30 @@
                                 >
                             </div>
                         </div>
+
                         <div class = "form-group">
                             <div class ="row">
-                                Register: <a th:href="@{/register}">>click here</a>
+                                Login / Register with Google: <a href="/oauth2/authorization/google"> click here</a>
                             </div>
                         </div>
                         <div class = "form-group">
                             <div class ="row">
-                                Login / Register with Google: <a href="/oauth2/authorization/google">click here</a>
+                                Login / Register with Naver: <a href="/oauth2/authorization/naver"> click here</a>
                             </div>
                         </div>
                         <div class = "form-group">
                             <div class ="row">
-                                Login / Register with Naver: <a href="/oauth2/authorization/naver">click here</a>
-                            </div>
-                        </div>
-                        <div class = "form-group">
-                            <div class ="row">
-                                Login / Register with Kakao: <a href="/oauth2/authorization/kakao">click here</a>
+                                Login / Register with Kakao: <a href="/oauth2/authorization/kakao"> click here</a>
                             </div>
                         </div>
 
                     </div>
                 </form>
+                <div class = "form-group">
+                    <div class ="row">
+                        Register: <a href="/register"> click here</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

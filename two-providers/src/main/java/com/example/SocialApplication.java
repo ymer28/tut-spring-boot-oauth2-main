@@ -117,7 +117,7 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http
 				.authorizeRequests(a -> a
-						.antMatchers("/", "/error", "/webjars/**").permitAll()
+						.antMatchers("/","/register/**","/process_register/**", "/error", "/webjars/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.exceptionHandling(e -> e
